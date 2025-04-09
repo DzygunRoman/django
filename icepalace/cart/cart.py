@@ -58,3 +58,22 @@ class Cart:#класс корзины
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
             yield item
+
+    def __len__(self):
+        """
+        Подсчет всех товаров в корзине.
+        """
+        return sum(item['quantity'] for item in self.cart.values())#возвращаем количество товаров в корзине
+
+    def get_total_price(self):
+        """
+        Подсчет стоимости товаров в корзине.
+        """
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+
+    def clear(self):
+        """
+        Удаление корзины из сессии.
+        """
+        del self.session[settings.CART_SESSION_ID]#удаляем корзину из сессии
+        self.save()
