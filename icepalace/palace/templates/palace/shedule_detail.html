@@ -1,0 +1,21 @@
+{% extends "palace/base.html" %}
+
+{% block title %}{{ event.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ event.name }}</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <strong>Дата и время:</strong> 
+                {{ event.time_event|date:"d.m.Y H:i" }}
+            </p>
+            <a href="{% url 'palace:shedule_list' %}" class="btn btn-primary">
+                Вернуться к расписанию
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

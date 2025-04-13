@@ -1,36 +1,63 @@
 {% extends "palace/base.html" %}
-{%load static%}
+{% load static %}
+
 {% block title %}
-{% if category %}{{ category.name }}{% else %}Products{% endif %}
+  {% if category %}{{ category.name }}{% else %}Товары{% endif %}
 {% endblock %}
 
 {% block content %}
-<div id="sidebar">
-    <h3>Категории</h3>
-    <ul>
-        <li {% if not category %}class="selected"{% endif %}>
-            <a href="{% url 'palace:product_list' %}">Все</a>
-        </li>
-        {% for c in categories %}
-          <li {% if category.slug == c.slug %}class="selected"{% endif%}>
-             <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
-          </li>
-        {% endfor %}
-    </ul>
-</div>
-<div id="main" class="product-list">
-    <h1>{% if category %}{{ category.name }}{% else %}Все услуги{% endif%}</h1>
-    {% for product in products %}
-    <div class="item">
-        <a href="{{ product.get_absolute_url }}">
-            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no-image.png" %}{% endif %}">
-        </a>
-        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-        <a href="{{ product.get_absolute_url }}">{{ product.description }}</a>
-        <br>
-        {{ product.price }} руб.
+<div class="container mt-4">
+  <div class="row">
+    <!-- Боковая панель с категориями -->
+    <div class="col-md-3">
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Категории</h3>
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="{% url 'palace:product_list' %}"
+             class="list-group-item list-group-item-action {% if not category %}active{% endif %}">
+            Все категории
+          </a>
+          {% for c in categories %}
+            <a href="{{ c.get_absolute_url }}"
+               class="list-group-item list-group-item-action {% if category.slug == c.slug %}active{% endif %}">
+              {{ c.name }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
     </div>
-    {% endfor %}
+
+    <!-- Основной контент с товарами -->
+    <div class="col-md-9">
+      <h1 class="mb-4">{% if category %}{{ category.name }}{% else %}Все услуги{% endif %}</h1>
+
+      <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100">
+            <a href="{{ product.get_absolute_url }}">
+              <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
+                   class="card-img-top"
+                   alt="{{ product.name }}"
+                   style="height: 200px; object-fit: cover;">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+              </h5>
+              <p class="card-text text-muted">{{ product.description|truncatechars:100 }}</p>
+            </div>
+            <div class="card-footer bg-transparent">
+              <h5 class="text-primary">{{ product.price }} руб.</h5>
+              <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
-

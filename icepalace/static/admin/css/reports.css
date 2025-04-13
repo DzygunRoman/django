@@ -1,0 +1,36 @@
+/* Стили для кнопок отчета */
+report-container {
+    padding: 20px;
+}
+
+.report-actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.report-button {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #417690;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.report-button:hover {
+    background-color: #205067;
+}
+
+.pdf-button {
+    background-color: #ba2121;
+}
+
+.pdf-button:hover {
+    background-color: #8a1a1a;
+}

@@ -1,0 +1,52 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Отчет по продажам</title>
+    <link rel="stylesheet" href="{{ static_path }}/css/pdf_styles.css">
+</head>
+<body>
+    <h1>Отчет по продажам с {{ report_data.start_date|date:"Y-m-d" }} по {{ report_data.end_date|date:"Y-m-d" }}</h1>
+
+    {% if report_data.table_data %}
+    <table>
+        <thead>
+            <tr>
+                <th>Время сеанса</th>
+                {% for pt in report_data.product_types %}
+                    <th>{{ pt.name }}</th>
+                {% endfor %}
+                <th>Общая сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in report_data.table_data %}
+            <tr>
+                <td>{{ row.time|date:"Y-m-d H:i" }}</td>
+                {% for pt in report_data.product_types %}
+                    <td>{{ row|get_item:pt.key }}</td>
+                {% endfor %}
+                <td>{{ row.total_sales }} ₽</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="total">
+                <td>Итого:</td>
+                {% for pt in report_data.product_types %}
+                    <td>{{ report_data.totals|get_item:pt.key }}</td>
+                {% endfor %}
+                <td>{{ report_data.totals.total_sales }} ₽</td>
+            </tr>
+        </tfoot>
+    </table>
+    {% else %}
+    <p>Нет данных за выбранный период</p>
+    {% endif %}
+
+    <p style="margin-top: 20px; font-size: 8pt; color: #888;">
+        Отчет сгенерирован {% now "Y-m-d H:i" %}
+    </p>
+</body>
+</html>

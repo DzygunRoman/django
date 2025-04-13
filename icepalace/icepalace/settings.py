@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -27,10 +26,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +39,15 @@ INSTALLED_APPS = [
     'palace.apps.PalaceConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'payment.apps.PaymentConfig',
+    'crispy_forms',
+    'crispy_bootstrap5',
+
+    #'rangefilter',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +60,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'icepalace.urls'
+LOGIN_REDIRECT_URL = 'palace_base'
+
 
 TEMPLATES = [
     {
@@ -73,7 +82,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'icepalace.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -83,7 +91,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -103,30 +110,50 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
-
-
+TIME_ZONE = 'Europe/Moscow'  # Укажите вашу временную зону
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '/python/django/icepalace/static'),
+]
+STATIC_ROOT = BASE_DIR / 'static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = 'media/'#базовый путь к медиа
-MEDIA_ROOT = BASE_DIR / 'media'# локальный путь к медиа
+MEDIA_URL = 'media/'  #базовый путь к медиа
+MEDIA_ROOT = BASE_DIR / 'media'  # локальный путь к медиа
 
-CART_SESSION_ID = 'cart'#ключ для хранения корзины в пользовательском сеансе
+CART_SESSION_ID = 'cart'  #ключ для хранения корзины в пользовательском сеансе
+
+# Конфигурация сервера электронной почты
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'dzygun-roman@mail.ru'
+EMAIL_HOST_PASSWORD = 'ba7yVCsuctLHAFcZYsg5'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+# конфигурация stripe
+STRIPE_PUBLIC_KEY = 'pk_test_51RDJXRRVcuPa07xb1xXqxIbin5OcSqrLfATLaITOw90SKPPKwNqFIDDQOj9YLChyY6SNi3pCRvCfvpqDqhsv3umm00Jiw9K35i'
+STRIPE_SECRET_KEY = 'sk_test_51RDJXRRVcuPa07xbqy4uXlOkpAx8H1gKwdF1gSGwGehxOXSdtw9iowpJ2tKv45L82JURHR8doDRz5ewBBqfDqgt100baG1Ms7K'
+STRIPE_API_VERSION = '2022-08-01'
+
+STRIPE_WEBHOOK_SECRET = 'whsec_fe1c3e3e63cf17509f2f1fa9a7b1adebb3c8400b81ec7afe00490f608c447dfd'
+
+
+#L
+
